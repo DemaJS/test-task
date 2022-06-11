@@ -1,0 +1,72 @@
+<template>
+  <preloader-component v-if="loading"></preloader-component>
+  <div v-else class="wrapper">
+    <div class="search__title">
+      <span>This is pokemons page</span>
+    </div>
+    <SearchBar />
+    <Pagination />
+    <div class="cards">
+      <PokemonCard
+        v-for="item in pokemonsList"
+        :key="item.name"
+        :name="item.name"
+        :id="item.url"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+import PokemonCard from "../components/Pokemon-card.vue";
+import SearchBar from "../components/Search-bar.vue";
+import Pagination from "../components/Pagination-component.vue";
+import { mapGetters } from "vuex";
+
+export default {
+  name: "Main-page",
+  data() {
+    return {
+      loading: false,
+    };
+  },
+  mounted() {
+    this.loadInfo();
+  },
+  computed: {
+    ...mapGetters(["pokemonsList"]),
+  },
+  methods: {
+    async loadInfo() {
+      this.loading = true;
+      await this.$store.dispatch("getPokemonsList");
+      this.loading = false;
+    },
+  },
+  components: {
+    PokemonCard,
+    SearchBar,
+    Pagination,
+  },
+};
+</script>
+
+<style scoped>
+.wrapper {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 10px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  grid-gap: 20px;
+  margin-top: 10px;
+}
+.search__title {
+  font-size: 40px;
+  font-weight: 900;
+  text-align: center;
+  color: #ff8b88;
+}
+</style>
