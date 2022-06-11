@@ -4,11 +4,11 @@
     <div class="search__title">
       <span>This is pokemons page</span>
     </div>
-    <SearchBar />
+    <SearchBar v-model="search" />
     <Pagination />
     <div class="cards">
       <PokemonCard
-        v-for="item in pokemonsList"
+        v-for="item in filteredList"
         :key="item.name"
         :name="item.name"
         :id="item.url"
@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       loading: false,
+      search: "",
     };
   },
   mounted() {
@@ -35,6 +36,11 @@ export default {
   },
   computed: {
     ...mapGetters(["pokemonsList"]),
+    filteredList() {
+      return this.pokemonsList.filter((pokemon) => {
+        return pokemon.name.toLowerCase().includes(this.search.toLowerCase());
+      });
+    },
   },
   methods: {
     async loadInfo() {

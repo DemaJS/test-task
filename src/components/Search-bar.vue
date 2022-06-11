@@ -3,8 +3,9 @@
     <div class="search__container">
       <div class="search-flex">
         <input
-          v-model="searchText"
+          :value="modelValue"
           class="search__input"
+          @input="$emit('update:modelValue', $event.target.value)"
           type="text"
           placeholder="Search"
         />
@@ -21,11 +22,14 @@ export default {
       searchText: "",
     };
   },
+
+  props: ["modelValue"],
+
   methods: {
     async searchHandler() {
       const data = await this.$store.dispatch("getAllPokemons");
-      data.includes(this.searchText)
-        ? this.$router.push({ path: `/details/${this.searchText}` })
+      data.includes(this.modelValue)
+        ? this.$router.push({ path: `/details/${this.modelValue}` })
         : this.$notify({
             title: "Error",
             type: "error",
