@@ -1,5 +1,6 @@
 <template>
-  <div class="search__title">
+  <preloader-component v-if="loading"></preloader-component>
+  <div v-else class="search__title">
     <span
       >{{ pokemonsDetail.name?.toUpperCase() }} &#8470;:{{
         pokemonsDetail.id
@@ -30,6 +31,9 @@
       </div>
     </div>
     <Stats :details="pokemonsDetail" />
+  </div>
+  <div style="text-align: center">
+    <router-link to="/">Home</router-link>
   </div>
 </template>
 
@@ -94,6 +98,7 @@ export default {
   margin-right: 10px;
 }
 .search__title {
+  position: relative;
   font-size: 40px;
   font-weight: 900;
   text-align: center;

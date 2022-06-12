@@ -86,7 +86,6 @@ export const store = createStore({
         const data = await $axios.get(`pokemon/${id}`);
         context.commit("setPokemonDetail", data.data);
       } catch (error) {
-        console.log(error.message);
         errorHandler(error);
       }
     },

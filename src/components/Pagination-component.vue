@@ -1,6 +1,6 @@
 <template>
   <div class="pagination">
-    <a href="#">&laquo;</a>
+    <a v-if="portionNumber > 1" @click="previousPage">&laquo;</a>
     <a
       :class="item === index && active"
       v-for="item in pageCount"
@@ -8,7 +8,7 @@
       @click="onPage(item)"
       >{{ item }}</a
     >
-    <a href="#">&raquo;</a>
+    <a v-if="portionNumber < 4" @click="nextPage">&raquo;</a>
   </div>
 </template>
 
@@ -20,23 +20,41 @@ export default {
     return {
       index: 1,
       active: "active",
+      portionNumber: 1,
+      portionSize: 3,
     };
   },
   computed: {
     ...mapGetters(["count"]),
     pageCount() {
-      let pages = Math.floor(this.count / 100);
       let pagesArray = [];
-      for (let i = 1; i < pages; i++) {
+      for (let i = 1; i < this.pages; i++) {
         pagesArray.push(i);
       }
-      return pages;
+      return pagesArray.filter(
+        (el) => el >= this.leftPortion && el <= this.rigthPortion
+      );
+    },
+    pages() {
+      return Math.ceil(this.count / 100);
+    },
+    leftPortion() {
+      return (this.portionNumber - 1) * this.portionSize + 1;
+    },
+    rigthPortion() {
+      return this.portionNumber * this.portionSize;
     },
   },
   methods: {
     async onPage(page) {
-      await this.$store.dispatch("paginationMethod", page * 100);
+      await this.$store.dispatch("paginationMethod", page !== 1 && page * 100);
       this.index = page;
+    },
+    previousPage() {
+      this.portionNumber = this.portionNumber - 1;
+    },
+    nextPage() {
+      this.portionNumber = this.portionNumber + 1;
     },
   },
 };
@@ -63,5 +81,6 @@ export default {
 
 .pagination a:hover:not(.active) {
   background-color: #ddd;
+  border-radius: 50%;
 }
 </style>
