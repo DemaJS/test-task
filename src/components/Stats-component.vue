@@ -8,7 +8,7 @@
       <div class="tittle">
         {{ item.stat.name.toUpperCase() }} : {{ item.base_stat }}
       </div>
-      <progress :value="item.base_stat" max="100"></progress>
+      <progress :value="item.base_stat" max="200"></progress>
     </div>
   </div>
 </template>

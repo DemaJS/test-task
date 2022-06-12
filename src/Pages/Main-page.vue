@@ -14,6 +14,7 @@
         :id="item.url"
       />
     </div>
+    <button class="up-btn" @click="scrollToTop">&#8593;</button>
   </div>
 </template>
 
@@ -48,6 +49,9 @@ export default {
       await this.$store.dispatch("getPokemonsList");
       this.loading = false;
     },
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
   },
   components: {
     PokemonCard,
@@ -74,5 +78,20 @@ export default {
   font-weight: 900;
   text-align: center;
   color: #ff8b88;
+}
+.up-btn {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  cursor: pointer;
+  background: transparent;
+  font-size: 25px;
+}
+.up-btn:hover {
+  background-color: #ddd;
+  border-radius: 50%;
 }
 </style>

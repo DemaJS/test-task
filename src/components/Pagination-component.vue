@@ -24,6 +24,10 @@ export default {
       portionSize: 3,
     };
   },
+  props: {},
+  mounted() {
+    this.refresh();
+  },
   computed: {
     ...mapGetters(["count"]),
     pageCount() {
@@ -47,8 +51,22 @@ export default {
   },
   methods: {
     async onPage(page) {
+      const paginationData = {
+        page,
+        portion: this.portionNumber,
+      };
+      localStorage.setItem("page", JSON.stringify(paginationData));
       await this.$store.dispatch("paginationMethod", page !== 1 && page * 100);
       this.index = page;
+    },
+    async refresh() {
+      const storageData = JSON.parse(localStorage.getItem("page"));
+      this.index = storageData.page;
+      this.portionNumber = storageData.portion;
+      await this.$store.dispatch(
+        "paginationMethod",
+        this.index !== 1 && this.index * 100
+      );
     },
     previousPage() {
       this.portionNumber = this.portionNumber - 1;
