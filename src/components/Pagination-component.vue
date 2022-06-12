@@ -61,12 +61,14 @@ export default {
     },
     async refresh() {
       const storageData = JSON.parse(localStorage.getItem("page"));
-      this.index = storageData.page;
-      this.portionNumber = storageData.portion;
-      await this.$store.dispatch(
-        "paginationMethod",
-        this.index !== 1 && this.index * 100
-      );
+      if (storageData) {
+        this.index = storageData.page;
+        this.portionNumber = storageData.portion;
+        await this.$store.dispatch(
+          "paginationMethod",
+          this.index !== 1 && this.index * 100
+        );
+      }
     },
     previousPage() {
       this.portionNumber = this.portionNumber - 1;
